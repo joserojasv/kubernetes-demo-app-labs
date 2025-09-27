@@ -191,3 +191,49 @@ This will open the app in your default browser using the Minikube service tunnel
 - `kubectl apply` simplifies the management and updates of Kubernetes resources.
 - Minikube simulates a real-world Kubernetes environment locally for testing and development.
 - Services enable reliable access to your Pods, both internally within the cluster and externally when needed.
+
+## ✏️ Docker Useful Commands
+
+See the logs
+```bash
+docker logs <container_name_or_id>
+```
+⚠️ WARNING
+
+**Be careful when running these commands! They can delete containers, images, and more.**</br>
+
+1. Stop and remove all containers
+```bash
+docker stop $(docker ps -q) && docker rm $(docker ps -aq)
+```
+
+3. Remove single container
+```bash
+docker rm <container_name_or_id>
+```
+
+4. Remove all images 
+```bash
+docker rmi $(docker images -q)
+```
+
+5. Remove single image
+```bash
+docker rmi <container_name_or_id>
+```
+6. Remove volume
+```bash
+docker volume rm <volume_name_or_id>
+```
+
+🔥 Optional full cleanup:
+If you're just cleaning up everything (containers, images, networks, build cache):
+```bash
+docker system prune -a
+```
+⚠️ This will delete:
+All **stopped** containers
+All images not used by running containers
+All networks not used
+All build cache
+You’ll be prompted to confirm before it runs.
