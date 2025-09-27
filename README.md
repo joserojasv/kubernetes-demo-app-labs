@@ -102,5 +102,92 @@ kubectl get pods
 Try crashing one of the pods and confirm the app continues running – Kubernetes routes traffic to the remaining healthy pods.</br>
 **Note**: *This is manual scaling. For auto-scaling, you'll need to configure Horizontal Pod Autoscaling and typically require metrics support, which is easier to set up on a cloud provider.*
 
-###  📄 2. Declarative Deployment (Alternative approach)
-Coming soon: Instructions using `kubectl apply -f <yaml-file>` and YAML configuration files for a declarative setup.
+###  📄 2. Declarative Deployment (Alternative Approach)
+In this approach, we define application resources using YAML configuration files and apply them with:
+```bash
+kubectl apply -f <yaml-file>
+```
+This is useful for versioning, automation, and maintaining consistency across environments.
+
+#### 🧱 Kubernetes Deployment Configuration File
+**File:** `deployment.yaml` </br>
+This file defines the desired state of a Deployment, including the number of pod replicas, the container image to use, and the pod labels.
+```bash
+# deployment.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: second-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: second-app
+      tier: backend
+  template:
+    metadata:
+      labels:
+        app: second-app
+        tier: backend
+    spec:
+      containers:
+        - name: second-node
+          image: academind/kub-first-app:2
+```
+
+#### 🌐 Kubernetes Service Configuration File
+**File:** `service.yaml` </br>
+This file defines a Service to expose the app defined in the deployment above. It maps incoming traffic to the correct Pods based on their labels.
+
+```bash
+# service.yaml
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+  labels:
+    group: example
+spec:
+  selector:
+    app: second-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: LoadBalancer
+```
+
+### 🚀 Applying the Configuration Files
+
+#### ✅ 1. Apply the Deployment:
+a. Create the service with the following:
+```bash
+kubectl apply -f deployment.yaml
+```
+Check that the deployment was created:
+```bash
+kubectl get deployments
+kubectl get pods
+```
+#### ✅ 2. Apply the Service:
+```bash
+kubectl apply -f service.yaml
+```
+Verify the service:
+```bash
+kubectl get services
+```
+### 🌐 Accessing the App
+If you're using Minikube, expose the service in your local environment:
+```bash
+minikube service backend
+```
+This will open the app in your default browser using the Minikube service tunnel.
+
+### ✅ Overview of Completed Work
+-  Declarative deployments use version-controlled YAML files for consistent and reusable configurations.
+- `kubectl apply` simplifies the management and updates of Kubernetes resources.
+- Minikube simulates a real-world Kubernetes environment locally for testing and development.
+- Services enable reliable access to your Pods, both internally within the cluster and externally when needed.
