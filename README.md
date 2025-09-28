@@ -76,8 +76,9 @@ kubectl get pods
 ```
 After about 5 seconds, you should see one deployment with `READY 1/1`, indicating that the deployment was successful. You can also verify this via the Minikube dashboard command `minikube dashboard`.
 
-c. Expose the deployment app with a service:
+c. Creates a **LoadBalancer service** to expose the **first-app deployment** to traffic on port 8080
 ```bash
+kubectl expose deployment first-app --name=my-service --type=LoadBalancer --port=8080
 kubectl expose deployment first-app --type=LoadBalancer --port=8080
 ```
 Now get a message indicating that the deployment was exposed, like this:`service/first-app exposed`
@@ -86,8 +87,9 @@ d. Check services:
 ```bash
 kubectl get services # the new service should appear in the list.
 ```
-e. Expose the app to the external world (publish the service):
+e. Opens the Kubernetes Service named first-app:
 ```bash
+minikube service <my-service>
 minikube service first-app # This will open the app URL in your browser.
 ```
 
