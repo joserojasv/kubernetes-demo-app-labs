@@ -234,6 +234,8 @@ docker volume rm <volume_name_or_id>
 If you're just cleaning up everything (containers, images, networks, build cache):
 ```bash
 docker system prune -a
+docker system prune --all --volumes
+docker builder prune
 ```
 ⚠️ This will delete:
 All **stopped** containers
