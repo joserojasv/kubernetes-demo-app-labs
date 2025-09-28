@@ -10,6 +10,7 @@ Download link: https://minikube.sigs.k8s.io/docs/
 After installation, start the dashboard with:
 
 ```bash
+minikube start  
 minikube dashboard
 ```
 This opens a web UI where you can monitor your cluster, pods, services, and more.
@@ -35,7 +36,7 @@ docker ps -a
 ## 📦 Build and Push the App Image
 1. Build the Docker image
 ```bash
-docker build -t goals-node .
+docker build -t first-node .
 ```
 2. Push to Docker Hub
 a. Log in:
@@ -46,13 +47,14 @@ b. Create a repository on Docker Hub
 Go to https://hub.docker.com and create a new repo (e.g., goals-node).
 c. Tag the image:
 ```bash
-docker tag goals-node <your-dockerhub-username>/goals-node:latest
-docker tag goals-node <your-dockerhub-username>/goals-node:v1
+docker tag <image_name> <your-dockerhub-username>/<repo_name>:<version>
+docker tag first-node jrojascr/kubernetes-demo:latest
+docker tag first-node jrojascr/kubernetes-demo:v1 # specific version tag
 ```
 d. Push the image:
 ```bash
-docker push <your-dockerhub-username>/goals-node:latest
-docker push <your-dockerhub-username>/goals-node:v1
+docker push <your-dockerhub-username>/<repo_name>
+docker push jrojascr/kubernetes-demo
 ```
 
 ## ☸️ Deploying the App on Kubernetes
@@ -61,32 +63,34 @@ Kubernetes can only use images that are available in a container registry (like 
 You can deploy the app using two approaches: **Imperative** and **Declarative**.
 
 ### 🔧 1. Imperative Deployment
-a. Create a Deployment:
+a. Create a Deployment</br>
+Make sure Minikube is running first by starting it with `minikube start`:
 ```bash
-kubectl create deployment first-app --image=<your-dockerhub-username>/goals-node:latest
+kubectl create deployment first-app --image=jrojascr/kubernetes-demo:latest
 ```
 b. Verify the deployment and pods:
 ```bash
 kubectl get deployments
 kubectl get pods
 ```
-If you see `READY 1/1`, the app is running.
-You can also confirm via the Minikube dashboard.
+After about 5 seconds, you should see one deployment with `READY 1/1`, indicating that the deployment was successful. You can also verify this via the Minikube dashboard command `minikube dashboard`.
 
-c. Expose the app with a service:
+c. Expose the deployment app with a service:
 ```bash
 kubectl expose deployment first-app --type=LoadBalancer --port=8080
 ```
+Now get a message indicating that the deployment was exposed, like this:`service/first-app exposed`
+
 d. Check services:
 ```bash
-kubectl get services
+kubectl get services # the new service should appear in the list.
 ```
-e. Access the app:
+e. Expose the app to the external world (publish the service):
 ```bash
-minikube service first-app
+minikube service first-app # This will open the app URL in your browser.
 ```
-This will open the app URL in your browser.
 
+---
 ### 🔁 Test Restarting and Scaling
 Crash a pod intentionally
 Use the dashboard or CLI to delete a pod and observe how Kubernetes restarts it automatically.

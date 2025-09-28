@@ -14,3 +14,4 @@ app.get('/error', (req, res) => {
 });
 
 app.listen(8080);
+// run it with: node app
