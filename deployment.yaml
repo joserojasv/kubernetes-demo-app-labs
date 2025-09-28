@@ -20,7 +20,7 @@ spec:
     spec: 
       containers:
         - name: second-node
-          image: academind/kub-first-app:2
+          image: jrojascr/kubernetes-demo:latest
           imagePullPolicy: Always
           livenessProbe: 
             httpGet:

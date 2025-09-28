@@ -1,3 +1,5 @@
+# NOTE: This is an example of how two configuration files—the Deployment and Service—can be combined into a single master file.
+
 apiVersion: v1
 kind: Service
 metadata:
@@ -32,6 +34,6 @@ spec:
     spec: 
       containers:
         - name: second-node
-          image: academind/kub-first-app:2
+          image: jrojascr/kubernetes-demo:latest
         # - name: ...
         #   image: ...

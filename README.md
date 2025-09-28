@@ -10,7 +10,8 @@ Download link: https://minikube.sigs.k8s.io/docs/
 After installation, start the dashboard with:
 
 ```bash
-minikube start  
+minikube start
+minikube status
 minikube dashboard
 ```
 This opens a web UI where you can monitor your cluster, pods, services, and more.
@@ -107,11 +108,7 @@ Try crashing one of the pods and confirm the app continues running – Kubernete
 **Note**: *This is manual scaling. For auto-scaling, you'll need to configure Horizontal Pod Autoscaling and typically require metrics support, which is easier to set up on a cloud provider.*
 
 ###  📄 2. Declarative Deployment (Alternative Approach)
-In this approach, we define application resources using YAML configuration files and apply them with:
-```bash
-kubectl apply -f <yaml-file>
-```
-This is useful for versioning, automation, and maintaining consistency across environments.
+In this approach, we define application resources using YAML configuration files. The advantage of using configuration files is that they enable versioning, automation, and help maintain consistency across different environments.
 
 #### 🧱 Kubernetes Deployment Configuration File
 **File:** `deployment.yaml` </br>
@@ -165,6 +162,7 @@ spec:
 
 ### 🚀 Applying the Configuration Files
 
+Make sure Minikube is running first by starting it with `minikube start`:
 #### ✅ 1. Apply the Deployment:
 a. Create the service with the following:
 ```bash
@@ -241,3 +239,25 @@ All images not used by running containers
 All networks not used
 All build cache
 You’ll be prompted to confirm before it runs.
+
+🔥 Delete All Resources in the default Namespace
+```bash
+kubectl delete all --all
+kubectl delete all --all -n my-namespace # or specific workspace
+```
+This deletes:
+Pods
+Deployments
+ReplicaSets
+Services
+DaemonSets
+StatefulSets
+Jobs
+
+🧯 To Completely Reset Minikube (Optional)
+If you're just testing and want to reset everything, including the cluster:
+```bash
+minikube delete
+minikube start
+```
+
